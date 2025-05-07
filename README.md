@@ -1,2 +1,2 @@
 # Career-Aspirations-of-Gen-Z
-The project explores the career aspirations and workplace expectations of Gen Z to uncover what drives their employment choices, value alignment, and need for growth, guidance, and recognition.
+This project explores Gen Z’s career aspirations, focusing on their views on work-life balance, preferred employer traits, and workplace values like guidance, growth, and recognition. It offers insights to help employers better attract and engage the next generation of talent.
