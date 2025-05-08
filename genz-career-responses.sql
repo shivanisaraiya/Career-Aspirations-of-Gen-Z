@@ -387,10 +387,12 @@ SELECT
          CAST(SUBSTRING_INDEX(REPLACE(expected_salary_after_5_years, 'k', ''), ' to ', -1) AS UNSIGNED)) / 2
     ) * 1000, 2) AS '5 years monthly salary'
     
-FROM career
--- WHERE preferred_working_environment  = 'Remote'-- IS NOT NULL AND preferred_working_environment <> ''
-GROUP BY preferred_working_environment
-ORDER BY '5 years expected salary' DESC;
+FROM 
+     career
+GROUP BY
+    preferred_working_environment
+ORDER BY 
+    '5 years expected salary' DESC;
 
 -- 5. How can Career Choice influence learning environment among Gen Z ?
 WITH career_influence_learn_env AS (
@@ -420,9 +422,4 @@ WHERE
 ORDER BY 
     `Max Responses` DESC;
     
-    -- ---------------------------------
-SELECT aspirational_career, preferred_learning_environment, COUNT(*) AS count
-FROM career
-WHERE preferred_learning_environment IS NOT NULL
-GROUP BY aspirational_career, preferred_learning_environment
-ORDER BY count DESC;
+ 
