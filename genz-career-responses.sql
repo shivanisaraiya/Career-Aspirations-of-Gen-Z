@@ -91,9 +91,12 @@ FROM career;
 SELECT 
     country AS Country, 
     COUNT(*) AS 'Country Count'
-FROM career 
-GROUP BY country 
-ORDER BY COUNT(*) DESC;
+FROM 
+    career 
+GROUP BY 
+    country 
+ORDER BY 
+    'Country Count' DESC;
 
 -- 3) Gender Distribution
 SELECT 
@@ -101,8 +104,10 @@ SELECT
      SUM(COUNT(*)) OVER() AS 'total count',
      Count(*) AS Count,
      ROUND(COUNT(*)*100/(SELECT COUNT(*) FROM career),2) AS 'Gender Distribution'
-FROM career
-GROUP BY gender;
+FROM 
+    career
+GROUP BY 
+    gender;
 
 -- 4) Distribution of Aspirational Career Choices
 
@@ -122,9 +127,12 @@ ORDER BY
 SELECT 
       expected_salary_first_3_years AS 'Expected Salary 3 Years Experience', 
       CONCAT(ROUND(COUNT(*)* 100/(SELECT COUNT(*) FROM CAREER),2),'%') AS Percentage
-FROM career 
-GROUP BY expected_salary_first_3_years
-ORDER BY Percentage DESC;
+FROM 
+    career 
+GROUP BY 
+    expected_salary_first_3_years
+ORDER BY 
+    Percentage DESC;
 
 -- 6) Salary expectation for 5 Years Experience
 SELECT 
@@ -139,12 +147,15 @@ SELECT
     gender,
     ROUND(AVG(
         (CAST(SUBSTRING_INDEX(REPLACE(starting_monthly_salary_expectation, 'k', ''), ' to ', 1) AS UNSIGNED) +
-         CAST(SUBSTRING_INDEX(REPLACE(starting_monthly_salary_expectation, 'k', ''), ' to ', -1) AS UNSIGNED)) / 2
-    ) * 1000, 2) AS avg_starting_salary
-FROM career
-WHERE starting_monthly_salary_expectation NOT LIKE 'Nil' 
-GROUP BY gender
-ORDER BY gender;
+         CAST(SUBSTRING_INDEX(REPLACE(starting_monthly_salary_expectation, 'k', ''), ' to ', -1) AS UNSIGNED)) / 2) * 1000, 2) AS avg_starting_salary
+FROM 
+     career
+WHERE 
+    starting_monthly_salary_expectation NOT LIKE 'Nil' 
+GROUP BY 
+    gender
+ORDER BY 
+    gender;
 
 
 -- 8) Top 5 Preferred Work Setups? 
@@ -179,9 +190,12 @@ SELECT
     `Social Impact over Abusive Manager`,
     COUNT(*) AS Count,
     ROUND((COUNT(*) * 100.0) / SUM(COUNT(*)) OVER(), 2) AS Percentage
-FROM categorized_data
-GROUP BY `Social Impact over Abusive Manager`
-ORDER BY Percentage DESC;
+FROM 
+    categorized_data
+GROUP BY 
+     `Social Impact over Abusive Manager`
+ORDER BY 
+     Percentage DESC;
 
 
 -- 2. Percentage of respondents willing and not willing to work for abusive managers 
@@ -193,10 +207,14 @@ SELECT
     END AS category,
     COUNT(*) AS count,
     CONCAT(ROUND((COUNT(*) * 100.0) / (SELECT COUNT(*) FROM career 
-    WHERE work_for_company_with_abusive_manager NOT LIKE '%Nil%'), 2), '%') AS percentage
-FROM career
-WHERE work_for_company_with_abusive_manager IN ('No', 'Yes')
-GROUP BY category;
+WHERE 
+      work_for_company_with_abusive_manager NOT LIKE '%Nil%'), 2), '%') AS percentage
+FROM 
+     career
+WHERE 
+    work_for_company_with_abusive_manager IN ('No', 'Yes')
+GROUP BY 
+    category;
 
 
  
@@ -212,12 +230,18 @@ SELECT
            WHERE work_for_3_years_or_more = 'Yes' 
            AND work_for_company_with_recent_layoffs = 'Yes'
            AND factors_for_happy_work_productivity NOT LIKE '%Nil%')) * 100, 2),'%') AS Percentage
-FROM career
-WHERE work_for_3_years_or_more = 'Yes'
-AND work_for_company_with_recent_layoffs = 'Yes' 
-AND factors_for_happy_work_productivity NOT LIKE '%Nil%' 
-GROUP BY factors_for_happy_work_productivity
-ORDER BY 'Respondant Count' DESC ;
+FROM 
+    career
+WHERE 
+    work_for_3_years_or_more = 'Yes'
+AND 
+    work_for_company_with_recent_layoffs = 'Yes' 
+AND 
+    factors_for_happy_work_productivity NOT LIKE '%Nil%' 
+GROUP BY 
+    factors_for_happy_work_productivity
+ORDER BY 
+    'Respondant Count' DESC ;
 
 -- 4. How many Gen Z individuals are willing to work for a company with no social impact? 
 
