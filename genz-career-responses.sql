@@ -34,53 +34,45 @@ CREATE TABLE career (
     workplace_frustrations VARCHAR(255)
 );
 
-## LOADING CSV FILE INTO MYSQL
- #Method 1
--- LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/career_aspirations.csv' 
--- INTO TABLE career 
--- FIELDS TERMINATED BY ','
--- IGNORE 1 LINES;
+-- LOADING CSV FILE INTO MYSQL
+ 
+ LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/career.csv' 
+ INTO TABLE career
+ FIELDS TERMINATED BY ',' 
+ ENCLOSED BY '"'
+ IGNORE 1 LINES;
 
- #Method 2
--- LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/career.csv' 
--- INTO TABLE career
--- FIELDS TERMINATED BY ',' 
--- ENCLOSED BY '"'
--- IGNORE 1 LINES;
+/* DATA CLEANING */
+SELECT DISTINCT preferred_learning_environment 
+FROM career;
 
-## DATA CLEANING
--- SELECT DISTINCT preferred_learning_environment FROM career;
+-- 1. Removing Extra Space from the required columns
+UPDATE career 
+SET preferred_learning_environment = TRIM(preferred_learning_environment);
 
--- UPDATE career 
--- SET preferred_learning_environment = TRIM(preferred_learning_environment);
+UPDATE career
+SET work_setup = TRIM(work_setup);
 
--- UPDATE career
--- SET work_setup = TRIM(work_setup);
+-- 2. Adding Primary Key as a unique identifier
+ALTER TABLE career_aspirations 
+ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY;
 
-
--- ALTER TABLE career_aspirations 
--- ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY;
--- RENAME TABLE career_aspirations TO career;
+-- 3. Changing table name
+RENAME TABLE career_aspirations TO career;
 
 
-# Change Column Datatype from VARCHAR to INT
--- ALTER TABLE career 
--- MODIFY COLUMN work_for_company_with_no_remote_policy INT;  
+-- 4.Change Column Datatype from VARCHAR to INT
+ALTER TABLE career 
+MODIFY COLUMN work_for_company_with_no_remote_policy INT;  
 
--- UPDATE career
--- SET preferred_learning_environment = TRIM(preferred_learning_environment)
---   WHERE preferred_learning_environment IS NOT NULL; */
-   
---  UPDATE career
---   SET gender = CASE
---      WHEN gender = 'F' THEN 'Female'
---      WHEN gender = 'M' THEN 'Male'
---      WHEN gender = 'Other' THEN 'Transgender'
---   ELSE gender
--- END; 
-
-
-## DATA CLEANING
+ -- 5. Standardizing Gender    
+ UPDATE career
+  SET gender = CASE
+     WHEN gender = 'F' THEN 'Female'
+     WHEN gender = 'M' THEN 'Male'
+     WHEN gender = 'Other' THEN 'Transgender'
+  ELSE gender
+END; 
 
 ## EXPLORATORY DATA ANALYSIS
 -- 1) Checking Rows in the Dataset
@@ -121,7 +113,7 @@ FROM
 GROUP BY 
      aspirational_career
 ORDER BY 
-     count DESC;
+     Count DESC;
 
 -- 5) Salary expectation for 3 Years Experience 
 SELECT 
