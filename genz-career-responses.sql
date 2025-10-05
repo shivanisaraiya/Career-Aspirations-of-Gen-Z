@@ -398,17 +398,20 @@ LIMIT 5;
 SELECT
     preferred_working_environment AS 'Preferred Work Setup',
     ROUND((COUNT(*) * 100.0) / (SELECT COUNT(*) FROM career), 2) AS 'Respondent Percentage',
-    ROUND(AVG(
-        (CAST(SUBSTRING_INDEX(REPLACE(expected_salary_after_5_years, 'k', ''), ' to ', 1) AS UNSIGNED) +
-         CAST(SUBSTRING_INDEX(REPLACE(expected_salary_after_5_years, 'k', ''), ' to ', -1) AS UNSIGNED)) / 2
-    ) * 1000, 2) AS '5 years monthly salary'
-    
-FROM 
-     career
-GROUP BY
-    preferred_working_environment
-ORDER BY 
-    '5 years expected salary' DESC;
+    ROUND(
+        AVG(
+            CASE 
+                WHEN expected_salary_after_5_years LIKE '>%' THEN
+                    CAST(SUBSTRING(expected_salary_after_5_years, 2, LENGTH(expected_salary_after_5_years)-2) AS UNSIGNED) * 1000
+                ELSE
+                    (CAST(SUBSTRING_INDEX(REPLACE(expected_salary_after_5_years, 'k', ''), ' to ', 1) AS UNSIGNED)
+                     + CAST(SUBSTRING_INDEX(REPLACE(expected_salary_after_5_years, 'k', ''), ' to ', -1) AS UNSIGNED)) / 2 * 1000
+            END
+        ), 2
+    ) AS '5 years monthly salary'
+FROM career
+GROUP BY preferred_working_environment
+ORDER BY `5 years monthly salary` DESC;
 
 -- 5. How can Career Choice influence learning environment among Gen Z ?
 WITH career_influence_learn_env AS (
